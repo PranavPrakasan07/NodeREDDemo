@@ -1,0 +1,145 @@
+[
+    {
+        "id": "65b415be66879397",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0e5e6c3cc242d971",
+        "type": "template",
+        "z": "65b415be66879397",
+        "name": "form",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n\n<html>\n\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <title>Welcome</title>\n    <meta name=\"description\" content=\"\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n    <style>\n        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');\n\n        * {\n            box-sizing: border-box;\n        }\n\n        .form-container {\n            display: flex;\n            flex-direction: row;\n        }\n\n        .flex-form-left {\n            flex: 50%;\n            vertical-align: middle;\n            padding: 0px 16px 0px 16px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .flex-form-right {\n            flex: 50%;\n            vertical-align: middle;\n            padding: 0px 16px 0px 16px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .tagline_active {\n            font-size: 40px;\n            color: white;\n            cursor: pointer;\n            padding: 0px 16px 0px 16px;\n            margin: 0px 16px 0px 16px;\n        }\n\n        .tagline_inactive {\n            font-size: 36px;\n            color: #444444;\n            cursor: pointer;\n            padding: 0px 16px 0px 16px;\n            margin: 0px 16px 0px 16px;\n        }\n\n        .error_message {\n            font-size: 14px;\n            color: #FF7043;\n            cursor: pointer;\n            text-align: left;\n            padding: 0px 4px 0px 4px;\n            margin: 0px 8px 0px 4px;\n        }\n\n        label {\n            font-size: 16px;\n            color: #444444;\n            cursor: pointer;\n            text-align: left;\n            padding: 0px 4px 0px 4px;\n            margin: 0px 8px 0px 4px;\n        }\n\n        .card {\n            background-color: #1f1f1f;\n            border-radius: 25px;\n            padding: 36px;\n        }\n\n        label {\n            font-size: 16px;\n        }\n\n        .form_input {\n            border-color: black;\n            border: 2px;\n            margin: 4px 16px 4px 16px;\n            text-align: center;\n            padding: 4px 16px 4px 16px;\n            font-size: 16px;\n            border-radius: 25px;\n            font-family: 'Poppins', sans-serif;\n        }\n\n\n        html {\n            scroll-behavior: smooth;\n            font-family: 'Poppins', sans-serif;\n        }\n\n        body {\n            background-color: white;\n        }\n\n        .flex-container {\n            display: flex;\n            flex-direction: row;\n            height: 100vh;\n        }\n\n        .flex-item-left {\n            flex: 50%;\n            vertical-align: middle;\n            padding: 0px 16px 0px 16px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .flex-item-right {\n            flex: 50%;\n            vertical-align: middle;\n            padding: 0px 16px 0px 16px;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .figma_lottie {\n            vertical-align: middle;\n            position: relative;\n        }\n\n        input {\n            padding: 4px 16px 4px 16px;\n            border: #1F1F1F;\n            border-radius: 10px;\n            font-size: 18px;\n            margin: 12px;\n            font-family: 'Poppins', sans-serif;\n            background-color: #C0C0C0;\n        }\n\n        /* Responsive layout - makes a one column-layout instead of two-column layout */\n\n        @media (max-width: 800px) {\n            .flex-container {\n                flex-direction: column;\n                height: 100vh;\n            }\n\n            .flex-item-left .block_1 {\n                vertical-align: middle;\n                padding: 0px 16px 0px 16px;\n                justify-content: center;\n                align-items: center;\n                vertical-align: middle;\n                position: relative;\n            }\n\n            .flex-item-right {\n                display: none;\n            }\n\n        }\n    </style>\n\n</head>\n\n<?php\n\n$servername = \"localhost\";\n$username = \"pranav\";\n$password = \"abc.1234\";\n$dbname = \"node_red_demo\";\n\n// Create connection\n$conn = mysqli_connect($servername, $username, $password, $dbname);\n\n// Check connection\nif (!$conn) {\n    echo \"Connection failed: \" . mysqli_connect_error();\n} else {\n    echo \"Connected successfully with DB\";\n}\n\n?>\n\n<?php\n\n\n$s_username = $s_password = $s_mno = \"\";\n$s_error_username = $s_error_password = $s_error_mno = \"&nbsp;\";\n\nif ($_SERVER[\"REQUEST_METHOD\"] == \"POST\") {\n    $s_username =  test_input($_POST[\"s_username\"]);\n    $s_password =  test_input($_POST[\"s_password\"]);\n    $s_mno =  test_input($_POST[\"s_rno\"]);\n\n    $salt = 'UsernameSalt012';\n\n    $s_error_username = validateData($s_username);\n    $s_error_password = validateData($s_password);\n    $s_error_mno = validateData($s_mno);\n\n    if (($s_username != \"\" && $s_password != \"\" && $s_mno != \"\")) {\n        echo \"Signup\";\n\n        // $_SESSION['username'] = $s_username;\n        // $_SESSION['password'] = sha1($s_password . $salt);\n        // $_SESSION['mobile'] = $s_mno;\n        // $_SESSION['loggedin'] = true;\n\n        // Check connection\n        if (!$conn) {\n            echo \"Connection failed: \" . mysqli_connect_error();\n        } else {\n            echo \"Connected successfully done\";\n\n            $sql = \"INSERT INTO userdata(username, password)  VALUES ('$s_username', '$s_password')\";\n\n            if (mysqli_query($conn, $sql)) {\n                echo \"Success\";\n                exit;\n            } else {\n                echo \"Query error : \" . mysqli_error($conn);\n            }\n        }\n    } else {\n        echo \"Error\";\n    }\n}\n\nfunction test_input($data)\n{\n    $data = trim($data);\n    $data = stripslashes($data);\n    $data = htmlspecialchars($data);\n    return $data;\n}\n\nfunction validateData($data)\n{\n\n    $error = \"\";\n\n    if (empty($data)) {\n        $error = \"Please fill this field\";\n    } else {\n        $error = \"\";\n    }\n\n    return $error;\n}\n\n?>\n\n<body>\n\n\n    <div class=\"flex-container\">\n        <div class=\"flex-item-left\">\n\n            <!-- Login/Signin Card -->\n\n            <div class=\"card\">\n\n                <div class=\"form-container\">\n\n                    <!-- Signin Toggle -->\n                    <div class=\"flex-form-right\">\n                        <div id=\"signin_header\" class=\"tagline_inactive\" style=\"padding-left: 0px; margin-left: 0;\" onclick=\"enableSignin(this)\">Signin</div>\n                    </div>\n\n                </div>\n\n                <br>\n\n                <form method=\"post\" action=\"<?php echo htmlspecialchars($_SERVER[\"PHP_SELF\"]); ?>\">\n                    <!-- Signin Form -->\n                    <table id=\"signin_table\">\n                        <tr>\n                            <td><label for=\"s_username\">Username</label></td>\n                            <td> <input id=\"s_username\" name=\"s_username\" type=\"email\" placeholder=\"me@gmail.com\"><br></td>\n                        </tr>\n                        <tr>\n                            <td></td>\n                            <td>\n                                <p id=\"s_username_error\" name=\"s_username_error\" class=\"error_message\"><?php echo $s_error_username; ?></p>\n                            </td>\n                        </tr>\n                        <tr>\n                            <td><label for=\"s_password\">Password</label></td>\n                            <td> <input id=\"s_password\" name=\"s_password\" type=\"password\" placeholder=\"Password\"><br></td>\n                        </tr>\n                        <tr>\n                            <td></td>\n                            <td>\n                                <p id=\"s_password_error\" name=\"s_password_error\" class=\"error_message\"><?php echo $s_error_password; ?></p>\n                            </td>\n                        </tr>\n                        <tr>\n                            <td><label for=\"s_rno\">Mobile Number</label></td>\n                            <td> <input id=\"s_rno\" name=\"s_rno\" type=\"text\" placeholder=\"+91 9191919191\"><br></td>\n                        </tr>\n                        <tr>\n                            <td></td>\n                            <td>\n                                <p id=\"s_rno_error\" name=\"s_rno_error\" class=\"error_message\"><?php echo $s_error_mno; ?></p>\n                            </td>\n                        </tr>\n                        <tr>\n                            <td colspan=\"2\"> <input id=\"signin_button\" class=\"button_style\" class=\"button_style\" type=\"submit\" value=\"Sign in\" style=\"background-color: white;\"><br></td>\n                        </tr>\n                    </table>\n\n                </form>\n            </div>\n\n        </div>\n\n        <!-- Lottie -->\n        <div class=\"flex-item-right\">\n            <lottie-player src=\"https://assets2.lottiefiles.com/private_files/lf30_ifegals2.json\" background=\"transparent\" speed=\"1\" style=\"width: 500px; height: 500px;\" loop autoplay></lottie-player>\n        </div>\n\n    </div>\n\n\n    <br>\n    <br>\n\n    <script src=\"https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js\"></script>\n\n</body>\n\n</html>",
+        "output": "str",
+        "x": 630,
+        "y": 580,
+        "wires": [
+            [
+                "13dd9246cf4b4707"
+            ]
+        ]
+    },
+    {
+        "id": "aabb5b5620af2051",
+        "type": "http in",
+        "z": "65b415be66879397",
+        "name": "",
+        "url": "/setdata",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 410,
+        "y": 420,
+        "wires": [
+            [
+                "0e5e6c3cc242d971"
+            ]
+        ]
+    },
+    {
+        "id": "13dd9246cf4b4707",
+        "type": "http response",
+        "z": "65b415be66879397",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 890,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "18c3213c7ad42cc3",
+        "type": "mysql",
+        "z": "65b415be66879397",
+        "mydb": "17fb6010faf5d120",
+        "name": "",
+        "x": 740,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "efcd6d53b5aaf792",
+        "type": "inject",
+        "z": "65b415be66879397",
+        "name": "inputdata",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "username,password",
+        "payloadType": "str",
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "b5131d940267b1aa"
+            ]
+        ]
+    },
+    {
+        "id": "df6534fec6f4a13a",
+        "type": "debug",
+        "z": "65b415be66879397",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "b5131d940267b1aa",
+        "type": "function",
+        "z": "65b415be66879397",
+        "name": "",
+        "func": "var sha256 = function sha256(ascii) {\n\tfunction rightRotate(value, amount) {\n\t\treturn (value>>>amount) | (value<<(32 - amount));\n\t};\n\t\n\tvar mathPow = Math.pow;\n\tvar maxWord = mathPow(2, 32);\n\tvar lengthProperty = 'length'\n\tvar i, j; // Used as a counter across the whole file\n\tvar result = ''\n\n\tvar words = [];\n\tvar asciiBitLength = ascii[lengthProperty]*8;\n\t\n\t//* caching results is optional - remove/add slash from front of this line to toggle\n\t// Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes\n\t// (we actually calculate the first 64, but extra values are just ignored)\n\tvar hash = sha256.h = sha256.h || [];\n\t// Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes\n\tvar k = sha256.k = sha256.k || [];\n\tvar primeCounter = k[lengthProperty];\n\t/*/\n\tvar hash = [], k = [];\n\tvar primeCounter = 0;\n\t//*/\n\n\tvar isComposite = {};\n\tfor (var candidate = 2; primeCounter < 64; candidate++) {\n\t\tif (!isComposite[candidate]) {\n\t\t\tfor (i = 0; i < 313; i += candidate) {\n\t\t\t\tisComposite[i] = candidate;\n\t\t\t}\n\t\t\thash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;\n\t\t\tk[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;\n\t\t}\n\t}\n\t\n\tascii += '\\x80' // Append Ƈ' bit (plus zero padding)\n\twhile (ascii[lengthProperty]%64 - 56) ascii += '\\x00' // More zero padding\n\tfor (i = 0; i < ascii[lengthProperty]; i++) {\n\t\tj = ascii.charCodeAt(i);\n\t\tif (j>>8) return; // ASCII check: only accept characters in range 0-255\n\t\twords[i>>2] |= j << ((3 - i)%4)*8;\n\t}\n\twords[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);\n\twords[words[lengthProperty]] = (asciiBitLength)\n\t\n\t// process each chunk\n\tfor (j = 0; j < words[lengthProperty];) {\n\t\tvar w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration\n\t\tvar oldHash = hash;\n\t\t// This is now the undefinedworking hash\", often labelled as variables a...g\n\t\t// (we have to truncate as well, otherwise extra entries at the end accumulate\n\t\thash = hash.slice(0, 8);\n\t\t\n\t\tfor (i = 0; i < 64; i++) {\n\t\t\tvar i2 = i + j;\n\t\t\t// Expand the message into 64 words\n\t\t\t// Used below if \n\t\t\tvar w15 = w[i - 15], w2 = w[i - 2];\n\n\t\t\t// Iterate\n\t\t\tvar a = hash[0], e = hash[4];\n\t\t\tvar temp1 = hash[7]\n\t\t\t\t+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1\n\t\t\t\t+ ((e&hash[5])^((~e)&hash[6])) // ch\n\t\t\t\t+ k[i]\n\t\t\t\t// Expand the message schedule if needed\n\t\t\t\t+ (w[i] = (i < 16) ? w[i] : (\n\t\t\t\t\t\tw[i - 16]\n\t\t\t\t\t\t+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0\n\t\t\t\t\t\t+ w[i - 7]\n\t\t\t\t\t\t+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1\n\t\t\t\t\t)|0\n\t\t\t\t);\n\t\t\t// This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble\n\t\t\tvar temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0\n\t\t\t\t+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj\n\t\t\t\n\t\t\thash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()\n\t\t\thash[4] = (hash[4] + temp1)|0;\n\t\t}\n\t\t\n\t\tfor (i = 0; i < 8; i++) {\n\t\t\thash[i] = (hash[i] + oldHash[i])|0;\n\t\t}\n\t}\n\t\n\tfor (i = 0; i < 8; i++) {\n\t\tfor (j = 3; j + 1; j--) {\n\t\t\tvar b = (hash[i]>>(j*8))&255;\n\t\t\tresult += ((b < 16) ? 0 : '') + b.toString(16);\n\t\t}\n\t}\n\treturn result;\n};\n\nconsole.log(\"Payload\" + msg.payload);\n\nconst arr = msg.payload.split(\",\");\n\nvar uname = arr[0].trim();\nvar password = arr[1].trim();\nconsole.log(\"SHA\" + sha256(password));\n\nhash = sha256(password);\n\nmsg.topic=\"INSERT INTO userdata (`username`, `password`) VALUES ('\" + uname + \"', '\" + hash + \"');\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 200,
+        "wires": [
+            [
+                "18c3213c7ad42cc3",
+                "df6534fec6f4a13a"
+            ]
+        ]
+    },
+    {
+        "id": "17fb6010faf5d120",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "node_red_demo",
+        "tz": "GMT",
+        "charset": "UTF8"
+    }
+]
