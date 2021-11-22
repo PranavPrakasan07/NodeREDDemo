@@ -1,0 +1,261 @@
+[
+    {
+        "id": "65b415be66879397",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "18c3213c7ad42cc3",
+        "type": "mysql",
+        "z": "65b415be66879397",
+        "mydb": "17fb6010faf5d120",
+        "name": "",
+        "x": 760,
+        "y": 280,
+        "wires": [
+            [
+                "6f88f0e1abcd286a",
+                "0f1f603bc95d1538"
+            ]
+        ]
+    },
+    {
+        "id": "efcd6d53b5aaf792",
+        "type": "inject",
+        "z": "65b415be66879397",
+        "name": "inputdata",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "username,pass",
+        "payloadType": "str",
+        "x": 340,
+        "y": 260,
+        "wires": [
+            [
+                "b5131d940267b1aa"
+            ]
+        ]
+    },
+    {
+        "id": "df6534fec6f4a13a",
+        "type": "debug",
+        "z": "65b415be66879397",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "b5131d940267b1aa",
+        "type": "function",
+        "z": "65b415be66879397",
+        "name": "",
+        "func": "var sha256 = function sha256(ascii) {\n\tfunction rightRotate(value, amount) {\n\t\treturn (value>>>amount) | (value<<(32 - amount));\n\t};\n\t\n\tvar mathPow = Math.pow;\n\tvar maxWord = mathPow(2, 32);\n\tvar lengthProperty = 'length'\n\tvar i, j; // Used as a counter across the whole file\n\tvar result = ''\n\n\tvar words = [];\n\tvar asciiBitLength = ascii[lengthProperty]*8;\n\t\n\t//* caching results is optional - remove/add slash from front of this line to toggle\n\t// Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes\n\t// (we actually calculate the first 64, but extra values are just ignored)\n\tvar hash = sha256.h = sha256.h || [];\n\t// Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes\n\tvar k = sha256.k = sha256.k || [];\n\tvar primeCounter = k[lengthProperty];\n\t/*/\n\tvar hash = [], k = [];\n\tvar primeCounter = 0;\n\t//*/\n\n\tvar isComposite = {};\n\tfor (var candidate = 2; primeCounter < 64; candidate++) {\n\t\tif (!isComposite[candidate]) {\n\t\t\tfor (i = 0; i < 313; i += candidate) {\n\t\t\t\tisComposite[i] = candidate;\n\t\t\t}\n\t\t\thash[primeCounter] = (mathPow(candidate, .5)*maxWord)|0;\n\t\t\tk[primeCounter++] = (mathPow(candidate, 1/3)*maxWord)|0;\n\t\t}\n\t}\n\t\n\tascii += '\\x80' // Append Ƈ' bit (plus zero padding)\n\twhile (ascii[lengthProperty]%64 - 56) ascii += '\\x00' // More zero padding\n\tfor (i = 0; i < ascii[lengthProperty]; i++) {\n\t\tj = ascii.charCodeAt(i);\n\t\tif (j>>8) return; // ASCII check: only accept characters in range 0-255\n\t\twords[i>>2] |= j << ((3 - i)%4)*8;\n\t}\n\twords[words[lengthProperty]] = ((asciiBitLength/maxWord)|0);\n\twords[words[lengthProperty]] = (asciiBitLength)\n\t\n\t// process each chunk\n\tfor (j = 0; j < words[lengthProperty];) {\n\t\tvar w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration\n\t\tvar oldHash = hash;\n\t\t// This is now the undefinedworking hash\", often labelled as variables a...g\n\t\t// (we have to truncate as well, otherwise extra entries at the end accumulate\n\t\thash = hash.slice(0, 8);\n\t\t\n\t\tfor (i = 0; i < 64; i++) {\n\t\t\tvar i2 = i + j;\n\t\t\t// Expand the message into 64 words\n\t\t\t// Used below if \n\t\t\tvar w15 = w[i - 15], w2 = w[i - 2];\n\n\t\t\t// Iterate\n\t\t\tvar a = hash[0], e = hash[4];\n\t\t\tvar temp1 = hash[7]\n\t\t\t\t+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1\n\t\t\t\t+ ((e&hash[5])^((~e)&hash[6])) // ch\n\t\t\t\t+ k[i]\n\t\t\t\t// Expand the message schedule if needed\n\t\t\t\t+ (w[i] = (i < 16) ? w[i] : (\n\t\t\t\t\t\tw[i - 16]\n\t\t\t\t\t\t+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0\n\t\t\t\t\t\t+ w[i - 7]\n\t\t\t\t\t\t+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1\n\t\t\t\t\t)|0\n\t\t\t\t);\n\t\t\t// This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble\n\t\t\tvar temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0\n\t\t\t\t+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2])); // maj\n\t\t\t\n\t\t\thash = [(temp1 + temp2)|0].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()\n\t\t\thash[4] = (hash[4] + temp1)|0;\n\t\t}\n\t\t\n\t\tfor (i = 0; i < 8; i++) {\n\t\t\thash[i] = (hash[i] + oldHash[i])|0;\n\t\t}\n\t}\n\t\n\tfor (i = 0; i < 8; i++) {\n\t\tfor (j = 3; j + 1; j--) {\n\t\t\tvar b = (hash[i]>>(j*8))&255;\n\t\t\tresult += ((b < 16) ? 0 : '') + b.toString(16);\n\t\t}\n\t}\n\treturn result;\n};\n\nconsole.log(\"Payload\" + msg.payload);\n\nconst arr = msg.payload.split(\",\");\n\nvar uname = arr[0].trim();\nvar password = arr[1].trim();\nconsole.log(\"SHA\" + sha256(password));\n\nhash = sha256(password);\n\nmsg.topic=\"INSERT INTO userdata (`username`, `password`) VALUES ('\" + uname + \"', '\" + hash + \"');\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 360,
+        "wires": [
+            [
+                "18c3213c7ad42cc3",
+                "df6534fec6f4a13a"
+            ]
+        ]
+    },
+    {
+        "id": "3839fb8b5ee4943f",
+        "type": "inject",
+        "z": "65b415be66879397",
+        "name": "inputdata",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "email,password",
+        "payloadType": "str",
+        "x": 300,
+        "y": 540,
+        "wires": [
+            [
+                "63a4b1dd1c0fdf4f"
+            ]
+        ]
+    },
+    {
+        "id": "6f88f0e1abcd286a",
+        "type": "debug",
+        "z": "65b415be66879397",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "63a4b1dd1c0fdf4f",
+        "type": "function",
+        "z": "65b415be66879397",
+        "name": "",
+        "func": "msg.topic = \"SELECT * FROM userdata\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 640,
+        "wires": [
+            [
+                "18c3213c7ad42cc3"
+            ]
+        ]
+    },
+    {
+        "id": "9b862f8678623658",
+        "type": "comment",
+        "z": "65b415be66879397",
+        "name": "SELECT",
+        "info": "",
+        "x": 170,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "87930523991d0707",
+        "type": "comment",
+        "z": "65b415be66879397",
+        "name": "ADD",
+        "info": "",
+        "x": 170,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "4293051cfd3a668d",
+        "type": "inject",
+        "z": "65b415be66879397",
+        "name": "inputdata",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "username",
+        "payloadType": "str",
+        "x": 360,
+        "y": 80,
+        "wires": [
+            [
+                "2f40e6f91ac49098"
+            ]
+        ]
+    },
+    {
+        "id": "0f1f603bc95d1538",
+        "type": "debug",
+        "z": "65b415be66879397",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 990,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "2f40e6f91ac49098",
+        "type": "function",
+        "z": "65b415be66879397",
+        "name": "",
+        "func": "console.log(\"Payload\" + msg.payload);\n\nconst arr = msg.payload.split(\",\");\n\nvar uname = arr[0].trim();\n\nmsg.topic = \"DELETE FROM userdata WHERE username = '\" + uname + \"';\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 120,
+        "wires": [
+            [
+                "18c3213c7ad42cc3"
+            ]
+        ]
+    },
+    {
+        "id": "074db5114dafc9ab",
+        "type": "comment",
+        "z": "65b415be66879397",
+        "name": "DELETE",
+        "info": "",
+        "x": 160,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "17fb6010faf5d120",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "node_red_demo",
+        "tz": "GMT",
+        "charset": "UTF8"
+    }
+]
